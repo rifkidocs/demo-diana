@@ -15,7 +15,7 @@ const sidebarItems = [
     icon: Brain,
     href: "/dashboard/psychotest",
   },
-  { name: "Manajemen Karyawan", icon: Building2, href: "/dashboard/employees" },
+  { name: "Manajemen Karyawan", icon: Building2, href: "/dashboard/karyawan" },
 ];
 
 export function DashboardSidebar() {
@@ -24,9 +24,11 @@ export function DashboardSidebar() {
       <ScrollArea className='h-full py-6'>
         <div className='space-y-4 py-4'>
           <div className='px-3 py-2'>
-            <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight'>
-              Dashboard
-            </h2>
+            <Link href='/dashboard'>
+              <h2 className='mb-2 px-4 text-lg font-semibold tracking-tight cursor-pointer hover:underline'>
+                Dashboard
+              </h2>
+            </Link>
             <div className='space-y-1'>
               {sidebarItems.map((item) => (
                 <Button
