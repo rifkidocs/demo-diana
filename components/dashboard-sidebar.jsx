@@ -9,11 +9,11 @@ const sidebarItems = [
     icon: Briefcase,
     href: "/dashboard/career",
   },
-  { name: "Dasbor Kandidat", icon: Users, href: "/dashboard/candidates" },
+  { name: "Manajemen Kandidat", icon: Users, href: "/dashboard/candidates" },
   {
-    name: "Halaman Psikotes Online",
+    name: "Manajemen Psikotes",
     icon: Brain,
-    href: "/dashboard/psychotest",
+    href: "/dashboard/psikotest",
   },
   { name: "Manajemen Karyawan", icon: Building2, href: "/dashboard/karyawan" },
 ];

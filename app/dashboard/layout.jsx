@@ -10,10 +10,10 @@ export default function RootLayout({ children }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true); // Ensures code is executed only on the client
+    setIsMounted(true);
   }, []);
 
-  if (!isMounted) return null; // Avoid rendering until mounted
+  if (!isMounted) return null;
 
   return (
     <html>
