@@ -46,6 +46,7 @@ const initialEmployees = [
 
 export default function EmployeeManagement() {
   const [employees, setEmployees] = useState(initialEmployees);
+  const [employeeToEdit, setEmployeeToEdit] = useState(null);
 
   const handleAddEmployee = (newEmployee) => {
     setEmployees([...employees, newEmployee]);
@@ -57,6 +58,7 @@ export default function EmployeeManagement() {
         emp.id === updatedEmployee.id ? updatedEmployee : emp
       )
     );
+    setEmployeeToEdit(null);
   };
 
   return (
@@ -66,6 +68,7 @@ export default function EmployeeManagement() {
       <div className='mb-4 flex justify-between md:items-center md:flex-row flex-col gap-y-2'>
         <AddEmployeeButton
           onAddEmployee={handleAddEmployee}
+          employeeToEdit={employeeToEdit}
           onEditEmployee={handleEditEmployee}
         />
         <ExcelImportSimulation />
@@ -74,6 +77,7 @@ export default function EmployeeManagement() {
         employees={employees}
         setEmployees={setEmployees}
         onEditEmployee={handleEditEmployee}
+        setEmployeeToEdit={setEmployeeToEdit}
       />
     </div>
   );
