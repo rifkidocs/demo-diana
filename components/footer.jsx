@@ -2,7 +2,7 @@ import { ExternalLink } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className='sticky bottom-0 z-40 w-full border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+    <footer className='w-full border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
       <div className='container flex flex-col-reverse md:flex-row h-auto md:h-14 items-center justify-between py-4 md:py-2 space-y-2 md:space-y-0'>
         {/* Left Section */}
         <div className='flex flex-col items-center md:flex-row md:items-center'>

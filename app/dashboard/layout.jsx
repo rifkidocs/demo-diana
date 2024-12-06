@@ -16,9 +16,9 @@ export default function DashboardLayout({ children }) {
   if (!isMounted) return null;
 
   return (
-    <div className='flex h-screen bg-background'>
+    <div className='flex min-h-screen bg-background'>
       <DashboardSidebar />
-      <div className='flex flex-col flex-1 overflow-hidden'>
+      <div className='flex flex-col flex-1'>
         <DashboardHeader />
         <DashboardShell>{children}</DashboardShell>
         <Footer />
