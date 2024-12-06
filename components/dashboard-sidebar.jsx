@@ -9,7 +9,7 @@ const sidebarItems = [
     icon: Briefcase,
     href: "/dashboard/career",
   },
-  { name: "Manajemen Kandidat", icon: Users, href: "/dashboard/candidates" },
+  { name: "Manajemen Kandidat", icon: Users, href: "/dashboard/kandidat" },
   {
     name: "Manajemen Psikotes",
     icon: Brain,
