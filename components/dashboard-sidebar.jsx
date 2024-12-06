@@ -5,9 +5,9 @@ import { Briefcase, Users, Brain, Building2 } from "lucide-react";
 
 const sidebarItems = [
   {
-    name: "Manajemen Halaman Karier",
+    name: "Manajemen Karir",
     icon: Briefcase,
-    href: "/dashboard/career",
+    href: "/dashboard/karir",
   },
   { name: "Manajemen Kandidat", icon: Users, href: "/dashboard/kandidat" },
   {

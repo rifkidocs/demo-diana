@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -72,9 +72,11 @@ export function KandidatList({ onSelectKandidat, kandidats, setKandidats }) {
   const [selectedKandidat, setSelectedKandidat] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
-  if (kandidats.length === 0) {
-    setKandidats(dummyKandidats);
-  }
+  useEffect(() => {
+    if (kandidats.length === 0) {
+      setKandidats(dummyKandidats);
+    }
+  }, [kandidats.length, setKandidats]);
 
   const filteredKandidats = kandidats.filter(
     (kandidat) =>

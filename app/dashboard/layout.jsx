@@ -6,7 +6,7 @@ import { DashboardSidebar } from "@/components/dashboard-sidebar";
 import { MainContent } from "@/components/main-content";
 import { Footer } from "@/components/footer";
 
-export default function RootLayout({ children }) {
+export default function DashboardLayout({ children }) {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -16,17 +16,13 @@ export default function RootLayout({ children }) {
   if (!isMounted) return null;
 
   return (
-    <html>
-      <body>
-        <div className='flex h-screen bg-background'>
-          <DashboardSidebar />
-          <div className='flex flex-col flex-1 overflow-hidden'>
-            <DashboardHeader />
-            <DashboardShell>{children}</DashboardShell>
-            <Footer />
-          </div>
-        </div>
-      </body>
-    </html>
+    <div className='flex h-screen bg-background'>
+      <DashboardSidebar />
+      <div className='flex flex-col flex-1 overflow-hidden'>
+        <DashboardHeader />
+        <DashboardShell>{children}</DashboardShell>
+        <Footer />
+      </div>
+    </div>
   );
 }
