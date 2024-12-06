@@ -2,21 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Briefcase, Users, Brain, Building2 } from "lucide-react";
-
-const sidebarItems = [
-  {
-    name: "Manajemen Karir",
-    icon: Briefcase,
-    href: "/dashboard/karir",
-  },
-  { name: "Manajemen Kandidat", icon: Users, href: "/dashboard/kandidat" },
-  {
-    name: "Manajemen Psikotes",
-    icon: Brain,
-    href: "/dashboard/psikotest",
-  },
-  { name: "Manajemen Karyawan", icon: Building2, href: "/dashboard/karyawan" },
-];
+import { sidebarItems } from "@/lib/constants";
 
 export function DashboardSidebar() {
   return (

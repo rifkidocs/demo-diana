@@ -61,7 +61,7 @@ export default function KarirPage() {
   };
 
   return (
-    <div className='container mx-auto'>
+    <div className='container mx-auto overflow-hidden'>
       <h1 className='text-2xl font-bold mb-4'>Manajemen Karir</h1>
       <Button onClick={() => setIsFormOpen(true)} className='mb-4'>
         <PlusIcon className='mr-2 h-4 w-4' /> Tambah Lowongan
