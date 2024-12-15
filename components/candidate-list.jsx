@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { KandidatDetailDialog } from "./kandidat-detail-dialog";
+import { KandidatDetailDialog } from "./candidate-detail-dialog";
 import { Label } from "@/components/ui/label";
 import {
   Select,

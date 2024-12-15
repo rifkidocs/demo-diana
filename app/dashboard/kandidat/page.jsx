@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { KandidatList } from "@/components/kandidat-list";
-import { StatusNotification } from "@/components/status-notification";
+import { KandidatList } from "@/components/candidate-list";
+import { StatusNotification } from "@/components/status-notif";
 
 const dummyKandidats = Array.from({ length: 100 }, (_, i) => ({
   id: i + 1,
