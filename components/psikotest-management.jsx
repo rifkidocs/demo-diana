@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import DeleteConfirmation from "@/components/delete-confirmation";
 
 export default function PsikotestManagement() {
   const [questions, setQuestions] = useState([
@@ -37,6 +38,7 @@ export default function PsikotestManagement() {
   ]);
 
   const [editingQuestion, setEditingQuestion] = useState(null);
+  const [deletingQuestionId, setDeletingQuestionId] = useState(null);
 
   const handleAddQuestion = () => {
     const newQuestion = {
@@ -53,7 +55,12 @@ export default function PsikotestManagement() {
   };
 
   const handleDeleteQuestion = (id) => {
+    setDeletingQuestionId(id);
+  };
+
+  const confirmDelete = (id) => {
     setQuestions(questions.filter((q) => q.id !== id));
+    setDeletingQuestionId(null);
   };
 
   const handleSaveQuestion = (question) => {
@@ -226,6 +233,13 @@ export default function PsikotestManagement() {
           )}
         </DialogContent>
       </Dialog>
+      {deletingQuestionId && (
+        <DeleteConfirmation
+          key={`delete-question-${deletingQuestionId}`}
+          onConfirm={() => confirmDelete(deletingQuestionId)}
+          onCancel={() => setDeletingQuestionId(null)}
+        />
+      )}
     </div>
   );
 }
