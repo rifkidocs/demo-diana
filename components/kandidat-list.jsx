@@ -1,112 +1,165 @@
 "use client";
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { useState } from "react"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { KandidatDetailDialog } from "./kandidat-detail-dialog"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 const dummyKandidats = Array.from({ length: 100 }, (_, i) => ({
   id: i + 1,
-  name: `Kandidat ${i + 1}`,
-  role: [
-    "Frontend Developer",
-    "Backend Developer",
-    "UI/UX Designer",
-    "Project Manager",
-    "Data Scientist",
-  ][Math.floor(Math.random() * 5)],
-  status: [
-    "Aplikasi",
-    "Screening",
-    "Wawancara",
-    "Tes Teknis",
-    "Penawaran",
-    "Diterima",
-  ][Math.floor(Math.random() * 6)],
-  email: `kandidat${i + 1}@example.com`,
-  phone: `08123456${(i + 1).toString().padStart(4, "0")}`,
-  experience: `Pengalaman kerja ${i + 1} tahun di bidang ${
-    [
-      "web development",
-      "mobile app development",
-      "data analysis",
-      "project management",
-    ][Math.floor(Math.random() * 4)]
-  }`,
-  education: `S1 ${
-    [
-      "Teknik Informatika",
-      "Sistem Informasi",
-      "Ilmu Komputer",
-      "Manajemen Informatika",
-    ][Math.floor(Math.random() * 4)]
-  }`,
-  skills: `${
-    [
-      "JavaScript",
-      "Python",
-      "React",
-      "Node.js",
-      "SQL",
-      "UI/UX Design",
-      "Agile",
-    ][Math.floor(Math.random() * 7)]
-  }, ${
-    ["TypeScript", "Java", "Vue.js", "Express", "MongoDB", "Figma", "Scrum"][
-      Math.floor(Math.random() * 7)
-    ]
-  }`,
-  coverLetterPdf: `/surat-lamaran-${i + 1}.pdf`,
-  cv: `/curriculum-vitae-${i + 1}.pdf`,
-  notes: {},
-}));
+  nik: `32${(i + 1).toString().padStart(14, '0')}`,
+  nama: `Kandidat ${i + 1}`,
+  kotaLahir: ["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang"][Math.floor(Math.random() * 5)],
+  tanggalLahir: `199${Math.floor(Math.random() * 9) + 1}-${(Math.floor(Math.random() * 12) + 1).toString().padStart(2, '0')}-${(Math.floor(Math.random() * 28) + 1).toString().padStart(2, '0')}`,
+  gender: Math.random() > 0.5 ? "Laki-laki" : "Perempuan",
+  alamatKtp: `Jl. Contoh No. ${i + 1}, ${["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang"][Math.floor(Math.random() * 5)]}`,
+  alamatDomisili: `Jl. Domisili No. ${i + 1}, ${["Jakarta", "Surabaya", "Bandung", "Medan", "Semarang"][Math.floor(Math.random() * 5)]}`,
+  pendidikan: ["S1 Teknik Informatika", "S1 Sistem Informasi", "D3 Manajemen Informatika", "S2 Ilmu Komputer"][Math.floor(Math.random() * 4)],
+  skillKeahlian: `${["JavaScript", "Python", "Java", "C++", "PHP"][Math.floor(Math.random() * 5)]}, ${["React", "Angular", "Vue", "Node.js", "Django"][Math.floor(Math.random() * 5)]}`,
+  lamaPengalaman: `${Math.floor(Math.random() * 10) + 1} tahun`,
+  foto: `/foto-kandidat-${i + 1}.jpg`,
+  cv: `/cv-kandidat-${i + 1}.pdf`,
+  ktp: `/ktp-kandidat-${i + 1}.pdf`,
+  kartuKeluarga: `/kk-kandidat-${i + 1}.pdf`,
+  skck: `/skck-kandidat-${i + 1}.pdf`,
+  referensiKerja: `/referensi-kandidat-${i + 1}.pdf`,
+  status: ["Aplikasi", "Screening", "Wawancara", "Tes Teknis", "Penawaran", "Diterima"][Math.floor(Math.random() * 6)],
+  notes: {}
+}))
 
-export function KandidatList({ onSelectKandidat, kandidats, setKandidats }) {
-  const [selectedKandidat, setSelectedKandidat] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
+export function KandidatList({
+  kandidats,
+  setKandidats
+}) {
+  const [selectedKandidat, setSelectedKandidat] = useState(null)
+  const [filters, setFilters] = useState({
+    nik: "",
+    nama: "",
+    skillKeahlian: "",
+    gender: "all",
+    ageRange: { min: "", max: "" },
+    experience: { min: "", max: "" },
+  })
 
-  useEffect(() => {
-    if (kandidats.length === 0) {
-      setKandidats(dummyKandidats);
-    }
-  }, [kandidats.length, setKandidats]);
+  if (kandidats.length === 0) {
+    // Initialize with dummy data if no candidates are present
+    setKandidats(dummyKandidats)
+  }
 
-  const filteredKandidats = kandidats.filter(
-    (kandidat) =>
-      kandidat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      kandidat.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      kandidat.status.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredKandidats = kandidats.filter(kandidat => {
+    const age = new Date().getFullYear() - new Date(kandidat.tanggalLahir).getFullYear()
+    const experience = parseInt(kandidat.lamaPengalaman.split(" ")[0])
+    
+    return (kandidat.nik.includes(filters.nik) &&
+    kandidat.nama.toLowerCase().includes(filters.nama.toLowerCase()) &&
+    kandidat.skillKeahlian.toLowerCase().includes(filters.skillKeahlian.toLowerCase()) &&
+    (filters.gender === "all" || kandidat.gender === filters.gender) &&
+    (filters.ageRange.min === "" || age >= parseInt(filters.ageRange.min)) &&
+    (filters.ageRange.max === "" || age <= parseInt(filters.ageRange.max)) &&
+    (filters.experience.min === "" || experience >= parseInt(filters.experience.min)) && (filters.experience.max === "" || experience <= parseInt(filters.experience.max)));
+  })
 
   const handleSelectKandidat = (kandidat) => {
-    setSelectedKandidat(kandidat);
-    onSelectKandidat(kandidat);
-  };
+    setSelectedKandidat(kandidat)
+  }
+
+  const handleUpdateStatus = (id, newStatus, notes) => {
+    setKandidats((prevKandidats) =>
+      prevKandidats.map((k) =>
+        k.id === id ? { ...k, status: newStatus, notes } : k))
+  }
 
   return (
-    <Card className='h-[calc(100vh-200px)] flex flex-col'>
+    (<Card className="h-[calc(100vh-200px)] flex flex-col">
       <CardHeader>
         <CardTitle>Daftar Kandidat</CardTitle>
-        <Input
-          placeholder='Cari kandidat...'
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className='mt-2'
-        />
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <Label htmlFor="nik">NIK</Label>
+            <Input
+              id="nik"
+              placeholder="Cari berdasarkan NIK"
+              value={filters.nik}
+              onChange={(e) => setFilters(prev => ({ ...prev, nik: e.target.value }))} />
+          </div>
+          <div>
+            <Label htmlFor="nama">Nama</Label>
+            <Input
+              id="nama"
+              placeholder="Cari berdasarkan nama"
+              value={filters.nama}
+              onChange={(e) => setFilters(prev => ({ ...prev, nama: e.target.value }))} />
+          </div>
+          <div>
+            <Label htmlFor="skillKeahlian">Skill Keahlian</Label>
+            <Input
+              id="skillKeahlian"
+              placeholder="Cari berdasarkan skill"
+              value={filters.skillKeahlian}
+              onChange={(e) => setFilters(prev => ({ ...prev, skillKeahlian: e.target.value }))} />
+          </div>
+          <div>
+            <Label htmlFor="gender">Gender</Label>
+            <Select
+              value={filters.gender}
+              onValueChange={(value) => setFilters(prev => ({ ...prev, gender: value }))}>
+              <SelectTrigger id="gender">
+                <SelectValue placeholder="Pilih gender" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Semua</SelectItem>
+                <SelectItem value="Laki-laki">Laki-laki</SelectItem>
+                <SelectItem value="Perempuan">Perempuan</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div>
+            <Label>Rentang Usia</Label>
+            <div className="flex space-x-2">
+              <Input
+                placeholder="Min"
+                type="number"
+                value={filters.ageRange.min}
+                onChange={(e) => setFilters(prev => ({ ...prev, ageRange: { ...prev.ageRange, min: e.target.value } }))} />
+              <Input
+                placeholder="Max"
+                type="number"
+                value={filters.ageRange.max}
+                onChange={(e) => setFilters(prev => ({ ...prev, ageRange: { ...prev.ageRange, max: e.target.value } }))} />
+            </div>
+          </div>
+          <div>
+            <Label>Pengalaman (tahun)</Label>
+            <div className="flex space-x-2">
+              <Input
+                placeholder="Min"
+                type="number"
+                value={filters.experience.min}
+                onChange={(e) => setFilters(
+                  prev => ({ ...prev, experience: { ...prev.experience, min: e.target.value } })
+                )} />
+              <Input
+                placeholder="Max"
+                type="number"
+                value={filters.experience.max}
+                onChange={(e) => setFilters(
+                  prev => ({ ...prev, experience: { ...prev.experience, max: e.target.value } })
+                )} />
+            </div>
+          </div>
+        </div>
       </CardHeader>
-      <CardContent className='flex-grow overflow-auto'>
+      <CardContent className="flex-grow overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>NIK</TableHead>
               <TableHead>Nama</TableHead>
-              <TableHead>Posisi</TableHead>
+              <TableHead>Pendidikan</TableHead>
+              <TableHead>Skill Keahlian</TableHead>
+              <TableHead>Lama Pengalaman</TableHead>
               <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
@@ -114,31 +167,26 @@ export function KandidatList({ onSelectKandidat, kandidats, setKandidats }) {
             {filteredKandidats.map((kandidat) => (
               <TableRow
                 key={kandidat.id}
-                className={`cursor-pointer ${
-                  selectedKandidat?.id === kandidat.id ? "bg-secondary" : ""
-                }`}
+                className="cursor-pointer hover:bg-secondary"
                 onClick={() => handleSelectKandidat(kandidat)}>
-                <TableCell className='flex items-center space-x-2'>
-                  <Avatar className='h-8 w-8'>
-                    <AvatarImage
-                      src={`https://api.dicebear.com/6.x/initials/svg?seed=${kandidat.name}`}
-                    />
-                    <AvatarFallback>
-                      {kandidat.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{kandidat.name}</span>
-                </TableCell>
-                <TableCell>{kandidat.role}</TableCell>
+                <TableCell>{kandidat.nik}</TableCell>
+                <TableCell>{kandidat.nama}</TableCell>
+                <TableCell>{kandidat.pendidikan}</TableCell>
+                <TableCell>{kandidat.skillKeahlian}</TableCell>
+                <TableCell>{kandidat.lamaPengalaman}</TableCell>
                 <TableCell>{kandidat.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </CardContent>
-    </Card>
+      {selectedKandidat && (
+        <KandidatDetailDialog
+          kandidat={selectedKandidat}
+          onClose={() => setSelectedKandidat(null)}
+          onUpdateStatus={handleUpdateStatus} />
+      )}
+    </Card>)
   );
 }
+
